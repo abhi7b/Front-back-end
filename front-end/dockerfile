@@ -1,0 +1,23 @@
+# Use the official Node.js image as the base image
+FROM node:18-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the package.json and package-lock.json files
+COPY package*.json ./
+
+# Install dependencies with legacy peer deps flag to handle conflicts
+RUN npm install --legacy-peer-deps
+
+# Copy the entire application code into the container
+COPY . .
+
+# Build the Next.js application
+RUN npm run build
+
+# Expose the port the app runs on
+EXPOSE 3001
+
+# Start the Next.js application on port 3001
+CMD ["npm", "run", "start", "--", "-p", "3001"]
